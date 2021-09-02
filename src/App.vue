@@ -1,17 +1,49 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <header-component></header-component>
+    <input-component></input-component>
+    <list-component v-bind:list="myList"></list-component>
+    <footer-component @clearItem="clearItem"></footer-component>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HeaderComponent from './components/Header-component.vue'
+import FooterComponent from './components/Footer-component.vue'
+import InputComponent from './components/Input-component.vue'
+import ListComponent from './components/List-component.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HeaderComponent,
+    FooterComponent,
+    InputComponent,
+    ListComponent
+  },
+  data() {
+    return {
+      myList: []
+    }
+  },
+  created() {
+    if(localStorage.length !== "") {
+      for(var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if(key !== 'loglevel:webpack-dev-server') {
+            var temp = localStorage.getItem(key);
+          var item = JSON.parse(temp);
+          if(item !== "") {
+            this.myList.push(item);
+          }
+        }
+      }
+    }
+  },
+  methods : {
+    clearItem() {
+      this.myList = [];
+    }
   }
 }
 </script>
